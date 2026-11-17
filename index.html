@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>91每天比赛-实时赛程与战况追踪</title>
+<meta name="description" content="91每天比赛汇集每日足球、篮球、电竞等赛事赛程与战况，覆盖比分直播、赛前前瞻、赛后复盘、球队数据与玩家社区讨论。每天更新赛程表与结果榜单，帮你快速锁定当天重点对决。">
+<meta name="keywords" content="91每天比赛">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f2c3f'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='%23ffcc4d' stroke-width='4'/%3E%3Cpath d='M32 16v32M16 32h32' stroke='%23ffcc4d' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{
+  --c-bg:#f5f7fa;
+  --c-surface:#ffffff;
+  --c-ink:#15202b;
+  --c-ink-soft:#4a5a6a;
+  --c-primary:#0f2c3f;
+  --c-primary-soft:#1d4761;
+  --c-accent:#e8a13a;
+  --c-accent-soft:#fff4e0;
+  --c-line:#dde4ec;
+  --c-line-strong:#c2cedb;
+  --c-green:#1f7a5c;
+  --c-red:#b8442f;
+  --radius-s:6px;
+  --radius-m:10px;
+  --radius-l:16px;
+  --shadow-s:0 1px 3px rgba(15,44,63,.08);
+  --shadow-m:0 6px 18px rgba(15,44,63,.10);
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+  --font-base:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --fs-xs:12px;
+  --fs-s:13px;
+  --fs-m:15px;
+  --fs-l:18px;
+  --fs-xl:22px;
+  --fs-2xl:28px;
+  --fs-3xl:36px;
+  --stick-offset:96px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--c-bg);
+  color:var(--c-ink);
+  font-family:var(--font-base);
+  font-size:var(--fs-m);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:var(--c-primary-soft);text-decoration:none;}
+a:hover{color:var(--c-accent);}
+[id]{scroll-margin-top:var(--stick-offset);}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--space-5);}
+.skip-link{
+  position:absolute;left:-9999px;top:0;background:var(--c-accent);color:#1a1a1a;
+  padding:10px 16px;z-index:200;border-radius:0 0 var(--radius-s) 0;
+}
+.skip-link:focus{left:0;}
+/* ===== 吸顶公告条 ===== */
+.notice-bar{
+  position:sticky;top:0;z-index:60;
+  background:var(--c-primary);color:#e6eef5;
+  font-size:var(--fs-s);
+}
+.notice-bar .wrap{
+  display:flex;align-items:center;gap:var(--space-3);
+  min-height:36px;padding-top:5px;padding-bottom:5px;
+}
+.notice-tag{
+  flex:none;background:var(--c-accent);color:#20242a;
+  font-weight:700;padding:1px 8px;border-radius:999px;
+  font-size:var(--fs-xs);letter-spacing:.5px;
+}
+.notice-text{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.notice-text b{color:#ffd98a;font-weight:600;}
+.notice-link{flex:none;color:#ffd98a;font-size:var(--fs-xs);}
+/* ===== 吸顶页头 ===== */
+.site-header{
+  position:sticky;top:36px;z-index:55;
+  background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--c-line);
+  box-shadow:var(--shadow-s);
+  backdrop-filter:saturate(150%) blur(6px);
+}
+.header-inner{
+  display:flex;align-items:center;gap:var(--space-4);
+  min-height:60px;padding-top:8px;padding-bottom:8px;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:none;}
+.brand-mark{width:36px;height:36px;flex:none;}
+.brand-text{display:flex;flex-direction:column;line-height:1.15;}
+.brand-name{font-size:var(--fs-l);font-weight:800;color:var(--c-primary);letter-spacing:.5px;}
+.brand-sub{font-size:11px;color:var(--c-ink-soft);letter-spacing:2px;}
+.main-nav{margin-left:var(--space-4);}
+.main-nav ul{list-style:none;display:flex;gap:var(--space-1);margin:0;padding:0;flex-wrap:wrap;}
+.main-nav a{
+  display:block;padding:7px 12px;border-radius:var(--radius-s);
+  font-size:var(--fs-s);color:var(--c-ink-soft);font-weight:500;
+}
+.main-nav a:hover,.main-nav a:focus-visible{background:var(--c-accent-soft);color:var(--c-primary);}
+.main-nav a.active{background:var(--c-primary);color:#fff;}
+.header-tools{margin-left:auto;display:flex;align-items:center;gap:var(--space-3);}
+.search-box{position:relative;}
+.search-box input{
+  width:190px;padding:8px 34px 8px 12px;border:1px solid var(--c-line-strong);
+  border-radius:999px;font-size:var(--fs-s);font-family:inherit;background:#fff;color:var(--c-ink);
+}
+.search-box input:focus{outline:2px solid var(--c-accent);outline-offset:1px;border-color:var(--c-accent);}
+.search-box .search-icon{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:var(--fs-s);color:var(--c-ink-soft);pointer-events:none;
+}
+.search-feedback{
+  display:none;position:absolute;right:0;top:calc(100% + 8px);width:260px;
+  background:#fff;border:1px solid var(--c-line);border-radius:var(--radius-m);
+  box-shadow:var(--shadow-m);padding:10px 12px;font-size:var(--fs-s);z-index:70;color:var(--c-ink-soft);
+}
+.btn-ghost{
+  display:inline-block;padding:8px 16px;border-radius:999px;border:1px solid var(--c-primary);
+  color:var(--c-primary);font-size:var(--fs-s);font-weight:600;background:#fff;cursor:pointer;
+  font-family:inherit;
+}
+.btn-ghost:hover,.btn-ghost:focus-visible{background:var(--c-primary);color:#fff;}
+.menu-toggle{
+  display:none;border:1px solid var(--c-line-strong);background:#fff;border-radius:var(--radius-s);
+  width:40px;height:38px;cursor:pointer;font-size:18px;color:var(--c-primary);line-height:1;
+  align-items:center;justify-content:center;
+}
+.menu-toggle:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px;}
+/* ===== 首屏 ===== */
+.hero{
+  background:linear-gradient(160deg,#0f2c3f 0%,#16374d 55%,#1d4761 100%);
+  color:#eaf1f7;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-120px;top:-80px;width:420px;height:420px;
+  border-radius:50%;background:radial-gradient(circle,rgba(232,161,58,.28),transparent 70%);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:var(--space-6);align-items:center;padding:var(--space-7) 0;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;font-size:var(--fs-xs);
+  letter-spacing:2px;color:#ffd98a;border:1px solid rgba(255,217,138,.45);
+  padding:4px 12px;border-radius:999px;margin-bottom:var(--space-4);
+}
+.hero h1{
+  font-size:var(--fs-3xl);line-height:1.25;margin:0 0 var(--space-4);
+  letter-spacing:1px;color:#fff;font-weight:800;
+}
+.hero-desc{font-size:var(--fs-m);color:#c6d5e2;max-width:32em;margin:0 0 var(--space-5);}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-5);}
+.btn-primary{
+  display:inline-block;padding:11px 24px;border-radius:999px;background:var(--c-accent);
+  color:#20180a;font-weight:700;font-size:var(--fs-s);box-shadow:0 4px 14px rgba(232,161,58,.35);
+}
+.btn-primary:hover{background:#f2b458;color:#20180a;transform:translateY(-2px);}
+.btn-outline{
+  display:inline-block;padding:11px 24px;border-radius:999px;border:1px solid rgba(255,255,255,.45);
+  color:#eaf1f7;font-size:var(--fs-s);font-weight:600;
+}
+.btn-outline:hover{background:rgba(255,255,255,.12);color:#fff;transform:translateY(-2px);}
+.btn-primary,.btn-outline{transition:transform .18s ease,background .18s ease;}
+.hero-stats{display:flex;gap:var(--space-6);flex-wrap:wrap;}
+.hero-stat b{display:block;font-size:var(--fs-2xl);color:#fff;font-weight:800;line-height:1.1;}
+.hero-stat span{font-size:var(--fs-xs);color:#9db3c6;letter-spacing:1px;}
+.hero-art{position:relative;min-height:280px;}
+.hero-art svg{width:100%;height:auto;}
+/* ===== 主布局 ===== */
+.layout{
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;
+  gap:var(--space-6);align-items:start;padding:var(--space-6) 0 var(--space-7);
+}
+main{min-width:0;}
+.sidebar{position:sticky;top:var(--stick-offset);display:flex;flex-direction:column;gap:var(--space-4);}
+.section{margin-bottom:var(--space-7);}
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-4);
+  border-bottom:2px solid var(--c-primary);padding-bottom:var(--space-2);margin-bottom:var(--space-4);
+}
+.section-head h2{
+  margin:0;font-size:var(--fs-xl);color:var(--c-primary);line-height:1.3;font-weight:800;
+}
+.section-head h2 .idx{
+  display:inline-block;font-size:var(--fs-xs);color:var(--c-accent);font-weight:700;
+  margin-right:6px;letter-spacing:1px;vertical-align:2px;
+}
+.section-note{font-size:var(--fs-xs);color:var(--c-ink-soft);flex:none;}
+/* ===== 概览四格 ===== */
+.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);}
+.ov-cell{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-m);
+  padding:var(--space-4);box-shadow:var(--shadow-s);
+}
+.ov-cell .ov-label{font-size:var(--fs-xs);color:var(--c-ink-soft);letter-spacing:1px;}
+.ov-cell .ov-num{font-size:var(--fs-2xl);font-weight:800;color:var(--c-primary);line-height:1.3;margin:4px 0 2px;}
+.ov-cell .ov-meta{font-size:var(--fs-xs);color:var(--c-ink-soft);}
+.ov-cell .ov-meta em{font-style:normal;color:var(--c-green);font-weight:600;}
+/* ===== 精选卡片 ===== */
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);}
+.card{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-l);
+  overflow:hidden;box-shadow:var(--shadow-s);display:flex;flex-direction:column;
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-m);}
+.card-media{position:relative;background:#0f2c3f;}
+.card-media img{width:100%;height:150px;object-fit:cover;}
+.card-badge{
+  position:absolute;left:10px;top:10px;background:rgba(15,44,63,.86);color:#ffd98a;
+  font-size:var(--fs-xs);padding:2px 9px;border-radius:999px;letter-spacing:.5px;
+}
+.card-body{padding:var(--space-4);display:flex;flex-direction:column;gap:6px;flex:1;}
+.card-body h3{margin:0;font-size:var(--fs-m);line-height:1.45;font-weight:700;color:var(--c-ink);}
+.card-body p{margin:0;font-size:var(--fs-s);color:var(--c-ink-soft);line-height:1.6;}
+.card-meta{font-size:var(--fs-xs);color:#7b8b9b;margin-top:auto;padding-top:6px;display:flex;gap:10px;flex-wrap:wrap;}
+.card-meta span::before{content:"·";margin-right:4px;color:var(--c-line-strong);}
+.card-meta span:first-child::before{content:none;}
+/* ===== 最新更新列表 ===== */
+.timeline-list{list-style:none;margin:0;padding:0;border-left:2px solid var(--c-line);}
+.timeline-list li{position:relative;padding:0 0 var(--space-4) var(--space-5);}
+.timeline-list li::before{
+  content:"";position:absolute;left:-7px;top:7px;width:12px;height:12px;border-radius:50%;
+  background:#fff;border:3px solid var(--c-accent);
+}
+.timeline-list time{display:block;font-size:var(--fs-xs);color:var(--c-ink-soft);letter-spacing:.5px;}
+.timeline-list strong{display:block;font-size:var(--fs-m);margin:2px 0 2px;color:var(--c-ink);}
+.timeline-list p{margin:0;font-size:var(--fs-s);color:var(--c-ink-soft);line-height:1.65;}
+.tag-inline{
+  display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;
+  background:var(--c-accent-soft);color:#8a5a10;margin-right:6px;font-weight:600;
+}
+/* ===== 分类入口 ===== */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);}
+.cat-item{
+  display:flex;flex-direction:column;gap:2px;padding:var(--space-4);
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-m);
+  box-shadow:var(--shadow-s);transition:border-color .18s ease,transform .18s ease;
+}
+.cat-item:hover{border-color:var(--c-accent);transform:translateY(-2px);}
+.cat-item b{font-size:var(--fs-m);color:var(--c-primary);font-weight:700;}
+.cat-item span{font-size:var(--fs-xs);color:var(--c-ink-soft);}
+.cat-item small{font-size:11px;color:#93a2b1;}
+/* ===== 深度解析 ===== */
+.article-box{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-l);
+  padding:var(--space-5) var(--space-6);box-shadow:var(--shadow-s);
+}
+.article-box h3{
+  font-size:var(--fs-l);color:var(--c-primary);margin:var(--space-5) 0 var(--space-2);
+  padding-left:10px;border-left:4px solid var(--c-accent);line-height:1.4;
+}
+.article-box h3:first-of-type{margin-top:var(--space-3);}
+.article-box p{margin:0 0 var(--space-3);text-align:justify;}
+.article-box strong{color:var(--c-primary);font-weight:700;}
+.callout{
+  background:var(--c-accent-soft);border:1px solid #f0d9ae;border-radius:var(--radius-m);
+  padding:var(--space-4);font-size:var(--fs-s);color:#6b4a12;margin:var(--space-3) 0;
+}
+.callout b{color:#8a5a10;}
+.compare-table{width:100%;border-collapse:collapse;font-size:var(--fs-s);margin:var(--space-3) 0 var(--space-4);}
+.compare-table th,.compare-table td{border:1px solid var(--c-line);padding:8px 10px;text-align:left;vertical-align:top;}
+.compare-table th{background:#eef3f8;color:var(--c-primary);font-weight:700;white-space:nowrap;}
+.compare-table td{color:var(--c-ink-soft);}
+/* ===== 体验指南 编号步骤 ===== */
+.steps{list-style:none;margin:0;padding:0;counter-reset:step;display:grid;gap:var(--space-3);}
+.steps li{
+  counter-increment:step;position:relative;background:var(--c-surface);
+  border:1px solid var(--c-line);border-radius:var(--radius-m);padding:var(--space-4) var(--space-4) var(--space-4) 60px;
+  box-shadow:var(--shadow-s);
+}
+.steps li::before{
+  content:counter(step,decimal-leading-zero);position:absolute;left:16px;top:var(--space-4);
+  font-size:var(--fs-xl);font-weight:800;color:var(--c-accent);line-height:1;
+}
+.steps li b{display:block;font-size:var(--fs-m);color:var(--c-primary);margin-bottom:2px;}
+.steps li span{font-size:var(--fs-s);color:var(--c-ink-soft);}
+/* ===== FAQ ===== */
+.faq-list{display:grid;gap:var(--space-2);}
+details.faq{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-m);
+  box-shadow:var(--shadow-s);overflow:hidden;
+}
+details.faq summary{
+  cursor:pointer;padding:var(--space-4);font-weight:600;font-size:var(--fs-m);
+  color:var(--c-primary);list-style:none;display:flex;align-items:center;gap:10px;
+}
+details.faq summary::-webkit-details-marker{display:none;}
+details.faq summary::before{
+  content:"+";flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:50%;background:var(--c-accent-soft);color:#8a5a10;
+  font-weight:800;font-size:15px;line-height:1;
+}
+details.faq[open] summary::before{content:"−";}
+details.faq summary:focus-visible{outline:2px solid var(--c-accent);outline-offset:-2px;}
+details.faq .faq-body{padding:0 var(--space-4) var(--space-4);font-size:var(--fs-s);color:var(--c-ink-soft);line-height:1.7;}
+details.faq .faq-body p{margin:0 0 8px;}
+/* ===== 评论 ===== */
+.comment-list{display:grid;gap:var(--space-3);}
+.comment{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-m);
+  padding:var(--space-4);box-shadow:var(--shadow-s);
+}
+.comment-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.avatar{
+  width:30px;height:30px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs-xs);font-weight:700;color:#fff;background:var(--c-primary-soft);
+}
+.comment-head .cname{font-weight:700;font-size:var(--fs-s);color:var(--c-ink);}
+.comment-head .ctime{font-size:var(--fs-xs);color:#93a2b1;}
+.comment-head .cwhere{font-size:11px;background:#eef3f8;color:#556;padding:1px 7px;border-radius:4px;}
+.comment p{margin:0;font-size:var(--fs-s);color:var(--c-ink-soft);line-height:1.7;}
+/* ===== 相关资讯 ===== */
+.news-list{list-style:none;margin:0;padding:0;display:grid;gap:0;}
+.news-list li{
+  display:grid;grid-template-columns:84px minmax(0,1fr);gap:var(--space-3);
+  padding:var(--space-3) 0;border-bottom:1px dashed var(--c-line);align-items:start;
+}
+.news-list li:last-child{border-bottom:none;}
+.news-date{font-size:var(--fs-xs);color:#93a2b1;letter-spacing:.5px;padding-top:3px;}
+.news-list a{font-size:var(--fs-s);font-weight:600;color:var(--c-ink);}
+.news-list a:hover{color:var(--c-accent);}
+.news-list .nsum{font-size:var(--fs-xs);color:var(--c-ink-soft);margin-top:2px;line-height:1.55;}
+/* ===== 标签索引 ===== */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+.tag-cloud a{
+  display:inline-block;padding:5px 13px;border-radius:999px;border:1px solid var(--c-line-strong);
+  font-size:var(--fs-s);color:var(--c-ink-soft);background:#fff;
+}
+.tag-cloud a:hover{border-color:var(--c-accent);color:var(--c-primary);background:var(--c-accent-soft);}
+/* ===== 榜单 ===== */
+.rank-list{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:rk;}
+.rank-list li{
+  counter-increment:rk;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:var(--space-3);
+  padding:var(--space-3) 0;border-bottom:1px solid var(--c-line);align-items:center;
+}
+.rank-list li:last-child{border-bottom:none;}
+.rank-list li::before{
+  content:counter(rk);font-size:var(--fs-l);font-weight:800;color:var(--c-line-strong);
+  text-align:center;
+}
+.rank-list li.top::before{color:var(--c-accent);}
+.rank-list .rk-name{font-size:var(--fs-s);font-weight:600;color:var(--c-ink);}
+.rank-list .rk-name small{display:block;font-weight:400;color:var(--c-ink-soft);font-size:var(--fs-xs);}
+.rank-list .rk-val{font-size:var(--fs-xs);color:var(--c-ink-soft);text-align:right;white-space:nowrap;}
+.rk-val b{color:var(--c-red);font-size:var(--fs-m);}
+/* ===== 互动投票 ===== */
+.vote-box{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-l);
+  padding:var(--space-5);box-shadow:var(--shadow-s);
+}
+.vote-q{font-size:var(--fs-m);font-weight:700;color:var(--c-primary);margin:0 0 var(--space-3);}
+.vote-opts{display:grid;gap:var(--space-2);margin-bottom:var(--space-3);}
+.vote-opt{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  border:1px solid var(--c-line-strong);border-radius:var(--radius-s);padding:9px 14px;
+  font-size:var(--fs-s);background:#fff;cursor:pointer;font-family:inherit;text-align:left;
+  color:var(--c-ink);transition:border-color .15s ease,background .15s ease;
+}
+.vote-opt:hover{border-color:var(--c-accent);}
+.vote-opt:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px;}
+.vote-opt .vo-pct{color:var(--c-ink-soft);font-size:var(--fs-xs);flex:none;}
+.vote-opt.selected{border-color:var(--c-primary);background:#eef3f8;}
+.vote-hint{font-size:var(--fs-xs);color:#93a2b1;margin:0;}
+/* ===== 侧栏 ===== */
+.side-card{
+  background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--radius-m);
+  padding:var(--space-4);box-shadow:var(--shadow-s);
+}
+.side-card h2{
+  font-size:var(--fs-m);margin:0 0 var(--space-3);color:var(--c-primary);
+  padding-bottom:8px;border-bottom:1px solid var(--c-line);line-height:1.4;
+}
+.side-nav{list-style:none;margin:0;padding:0;display:grid;gap:2px;}
+.side-nav a{
+  display:block;padding:6px 10px;border-radius:var(--radius-s);font-size:var(--fs-s);
+  color:var(--c-ink-soft);border-left:3px solid transparent;
+}
+.side-nav a:hover{background:#eef3f8;color:var(--c-primary);}
+.side-nav a.active{background:var(--c-accent-soft);color:#8a5a10;border-left-color:var(--c-accent);font-weight:600;}
+.side-mini{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-3);}
+.side-mini li{padding-bottom:var(--space-3);border-bottom:1px dashed var(--c-line);}
+.side-mini li:last-child{border-bottom:none;padding-bottom:0;}
+.side-mini a{font-size:var(--fs-s);font-weight:600;color:var(--c-ink);line-height:1.5;display:block;}
+.side-mini span{font-size:var(--fs-xs);color:#93a2b1;display:block;margin-top:2px;}
+.side-facts{font-size:var(--fs-s);color:var(--c-ink-soft);margin:0;padding-left:18px;}
+.side-facts li{margin-bottom:6px;}
+.side-facts b{color:var(--c-primary);}
+/* ===== 页脚 ===== */
+.site-footer{background:#0d2231;color:#a9bccb;font-size:var(--fs-s);}
+.footer-main{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:var(--space-5);
+  padding:var(--space-6) 0 var(--space-5);
+}
+.footer-brand .brand-name{color:#fff;}
+.footer-brand p{font-size:var(--fs-s);color:#8fa4b5;margin:var(--space-3) 0 0;line-height:1.7;max-width:30em;}
+.footer-col h3{font-size:var(--fs-s);color:#ffd98a;margin:0 0 var(--space-3);font-weight:700;letter-spacing:1px;}
+.footer-col ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;}
+.footer-col a{color:#a9bccb;font-size:var(--fs-s);}
+.footer-col a:hover{color:#fff;}
+.footer-note{
+  border-top:1px solid rgba(255,255,255,.1);padding:var(--space-4) 0;
+  font-size:var(--fs-xs);color:#7d92a3;line-height:1.7;
+}
+.footer-note p{margin:0 0 6px;}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.1);padding:var(--space-3) 0 var(--space-5);
+  display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;
+  font-size:var(--fs-xs);color:#7d92a3;
+}
+/* ===== 回到顶部 ===== */
+.to-top{
+  position:fixed;right:20px;bottom:24px;z-index:80;width:44px;height:44px;border-radius:50%;
+  background:var(--c-primary);color:#fff;border:none;cursor:pointer;display:none;
+  align-items:center;justify-content:center;box-shadow:var(--shadow-m);font-size:18px;
+}
+.to-top.show{display:flex;}
+.to-top:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px;}
+/* ===== 响应式 ===== */
+@media (max-width:1000px){
+  .layout{grid-template-columns:minmax(0,1fr);}
+  .sidebar{position:static;order:2;}
+  main{order:1;}
+  .hero-grid{grid-template-columns:minmax(0,1fr);}
+  .hero-art{display:none;}
+  .feature-grid{grid-template-columns:repeat(2,1fr);}
+  .overview-grid{grid-template-columns:repeat(2,1fr);}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
+  .footer-main{grid-template-columns:1fr 1fr;}
+  .main-nav{display:none;}
+  .menu-toggle{display:inline-flex;}
+  .site-header.nav-open .main-nav{
+    display:block;position:absolute;left:0;right:0;top:100%;background:#fff;
+    border-bottom:1px solid var(--c-line);box-shadow:var(--shadow-m);padding:var(--space-3) var(--space-5);
+  }
+  .site-header.nav-open .main-nav ul{flex-direction:column;gap:2px;}
+  .header-inner{position:relative;flex-wrap:wrap;}
+  .search-box input{width:150px;}
+}
+@media (max-width:640px){
+  :root{--fs-3xl:28px;--fs-2xl:24px;--fs-xl:19px;}
+  .wrap{padding:0 var(--space-4);}
+  .feature-grid,.overview-grid,.cat-grid{grid-template-columns:1fr;}
+  .footer-main{grid-template-columns:1fr;}
+  .header-tools{gap:8px;}
+  .search-box input{width:120px;}
+  .hero-stats{gap:var(--space-4);}
+  .article-box{padding:var(--space-4);}
+  .news-list li{grid-template-columns:64px minmax(0,1fr);}
+  .to-top{right:14px;bottom:16px;}
+  .notice-link{display:none;}
+  .side-card{padding:var(--space-4);}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{transition:none!important;animation:none!important;}
+  .card:hover,.cat-item:hover,.btn-primary:hover,.btn-outline:hover{transform:none;}
+}
+</style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<!-- 吸顶公告条 -->
+<div class="notice-bar" role="region" aria-label="站点公告">
+  <div class="wrap">
+    <span class="notice-tag">更新</span>
+    <span class="notice-text">
+      <b>91每天比赛</b> 11月8日赛程已上线：足球 14 场、篮球 6 场、电竞 4 场，昨日中超第 30 轮比分与积分榜同步刷新。
+    </span>
+    <a class="notice-link" href="#/latest">查看赛程明细</a>
+  </div>
+</div>
+
+<!-- 吸顶页头 -->
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a class="brand" href="#/top" aria-label="91每天比赛 首页">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#0f2c3f"/>
+        <circle cx="32" cy="32" r="17" fill="none" stroke="#ffcc4d" stroke-width="3.5"/>
+        <path d="M32 15v34M15 32h34" stroke="#ffcc4d" stroke-width="2.5"/>
+        <circle cx="32" cy="32" r="4.5" fill="#ffcc4d"/>
+      </svg>
+      <span class="brand-text">
+        <span class="brand-name">91每天比赛</span>
+        <span class="brand-sub">DAILY MATCH</span>
+      </span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="展开或收起导航">
+      ☰
+    </button>
+    <nav class="main-nav" id="mainNav" aria-label="主题导航">
+      <ul>
+        <li><a href="#/overview" class="active">赛事概览</a></li>
+        <li><a href="#/featured">精选推荐</a></li>
+        <li><a href="#/latest">最新赛程</a></li>
+        <li><a href="#/category">分类入口</a></li>
+        <li><a href="#/insight">深度解析</a></li>
+        <li><a href="#/guide">体验指南</a></li>
+        <li><a href="#/faq">常见问题</a></li>
+      </ul>
+    </nav>
+    <div class="header-tools">
+      <div class="search-box">
+        <label for="searchInput" class="sr-only" style="position:absolute;left:-9999px;">搜索赛事</label>
+        <input type="search" id="searchInput" placeholder="搜球队 / 赛程 / 球员" autocomplete="off">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <div class="search-feedback" id="searchFeedback" role="status" aria-live="polite"></div>
+      </div>
+      <a class="btn-ghost" href="#/latest">今日赛程</a>
+    </div>
+  </div>
+</header>
+
+<!-- 首屏 -->
+<section class="hero" id="/top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-kicker">DAILY MATCH · 11月8日赛程在线</span>
+      <h1>91每天比赛</h1>
+      <p class="hero-desc">
+        每天把足球、篮球、电竞三大项的当天对阵、开赛时间、比分与积分变化整理成一张可检索的赛程表。想看今晚哪场该守，先翻一眼今日 24 场对决的时间轴。
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#/latest">看今日 24 场对阵</a>
+        <a class="btn-outline" href="#/category">按项目筛选</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>24</b><span>今日对决赛程</span></div>
+        <div class="hero-stat"><b>3</b><span>覆盖大项</span></div>
+        <div class="hero-stat"><b>11-08</b><span>最近更新日期</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 420 320" role="img" aria-label="赛程时间轴与比分牌示意构图">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffd98a" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#e8a13a" stop-opacity=".25"/>
+          </linearGradient>
+        </defs>
+        <rect x="20" y="26" width="380" height="268" rx="18" fill="#0b2434" stroke="#2b556f" stroke-width="1.5"/>
+        <line x1="60" y1="270" x2="60" y2="56" stroke="#2b556f" stroke-width="2"/>
+        <g font-family="PingFang SC, sans-serif" font-size="13" fill="#c6d5e2">
+          <circle cx="60" cy="80" r="6" fill="url(#g1)"/>
+          <text x="80" y="85">19:35 中超 · 上海海港 vs 成都蓉城</text>
+          <rect x="80" y="96" width="250" height="1" fill="#23455b"/>
+          <circle cx="60" cy="132" r="6" fill="#3d6f8e"/>
+          <text x="80" y="137">20:00 CBA · 辽宁 vs 广东</text>
+          <rect x="80" y="148" width="250" height="1" fill="#23455b"/>
+          <circle cx="60" cy="184" r="6" fill="#3d6f8e"/>
+          <text x="80" y="189">21:00 英雄联盟 · BLG vs TES</text>
+          <rect x="80" y="200" width="250" height="1" fill="#23455b"/>
+          <circle cx="60" cy="236" r="6" fill="url(#g1)"/>
+          <text x="80" y="241">23:30 英超 · 阿森纳 vs 维拉</text>
+        </g>
+        <g transform="translate(268,36)">
+          <rect width="112" height="52" rx="8" fill="#123246" stroke="#2b556f"/>
+          <text x="14" y="22" font-size="11" fill="#8fa9bd" font-family="PingFang SC, sans-serif">今日已完赛</text>
+          <text x="14" y="42" font-size="20" font-weight="700" fill="#ffd98a" font-family="PingFang SC, sans-serif">11 场</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 主体布局 -->
+<div class="wrap layout">
+  <main id="main">
+
+    <!-- 领域概览 -->
+    <section class="section" id="/overview">
+      <div class="section-head">
+        <h2><span class="idx">01</span>赛事概览</h2>
+        <span class="section-note">数据截面：2026-11-08 12:00</span>
+      </div>
+      <div class="overview-grid">
+        <div class="ov-cell">
+          <div class="ov-label">今日待开赛</div>
+          <div class="ov-num">13</div>
+          <div class="ov-meta">最早 18:00 开球，最晚 <em>23:30</em></div>
+        </div>
+        <div class="ov-cell">
+          <div class="ov-label">已完赛</div>
+          <div class="ov-num">11</div>
+          <div class="ov-meta">比分已录入 <em>22 条</em></div>
+        </div>
+        <div class="ov-cell">
+          <div class="ov-label">覆盖联赛</div>
+          <div class="ov-num">9</div>
+          <div class="ov-meta">中超、CBA、英超、LCK 等</div>
+        </div>
+        <div class="ov-cell">
+          <div class="ov-label">社区讨论</div>
+          <div class="ov-num">368</div>
+          <div class="ov-meta">较昨日增 <em>+42 条</em></div>
+        </div>
+      </div>
+      <p style="font-size:var(--fs-s);color:var(--c-ink-soft);margin:var(--space-3) 0 0;">
+        赛程口径按北京时间统计。同一时段多场并行时，按项目分别列在「最新赛程」与侧栏快讯，避免把不同联赛的开球时间混在一起读。
+      </p>
+    </section>
+
+    <!-- 精选内容推荐 -->
+    <section class="section" id="/featured">
+      <div class="section-head">
+        <h2><span class="idx">02</span>精选内容推荐</h2>
+        <span class="section-note">编辑挑出 3 条重点</span>
+      </div>
+      <div class="feature-grid">
+        <article class="card">
+          <div class="card-media">
+            <img src="https://picsum.photos/seed/91match-cba/480/300" width="480" height="300" loading="lazy" alt="CBA 辽宁本钢对阵广东宏远赛前热身场景">
+            <span class="card-badge">篮球</span>
+          </div>
+          <div class="card-body">
+            <h3>辽宁 vs 广东：CBA 第 10 轮内线对位怎么拆</h3>
+            <p>韩德君本赛季场均 9.8 个篮板，广东的双塔轮转在第三节常被针对。20:00 开球前，先看两队的换防习惯。</p>
+            <div class="card-meta"><span>11-08 20:00</span><span>赛前前瞻</span></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-media">
+            <img src="https://picsum.photos/seed/91match-csl/480/300" width="480" height="300" loading="lazy" alt="中超上海海港主场比赛看台与球门视角">
+            <span class="card-badge">足球</span>
+          </div>
+          <div class="card-body">
+            <h3>中超第 30 轮：海港主场收官战的积分账</h3>
+            <p>海港当前 62 分，落后榜首 3 分。19:35 对成都蓉城，赢球仍有争冠悬念，输球则锁定第三。</p>
+            <div class="card-meta"><span>11-08 19:35</span><span>积分形势</span></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-media">
+            <img src="https://picsum.photos/seed/91match-lol/480/300" width="480" height="300" loading="lazy" alt="英雄联盟职业比赛选手操作台与外设特写">
+            <span class="card-badge">电竞</span>
+          </div>
+          <div class="card-body">
+            <h3>BLG 对 TES：21:00 打野节奏与版本答案</h3>
+            <p>13.22 版本削弱了打野野区经验，BLG 前 15 分钟一血率仍保持 68%。这是今晚最值得掐点看的对局。</p>
+            <div class="card-meta"><span>11-08 21:00</span><span>版本解读</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 最新更新 -->
+    <section class="section" id="/latest">
+      <div class="section-head">
+        <h2><span class="idx">03</span>最新更新</h2>
+        <span class="section-note">按时间倒序</span>
+      </div>
+      <ul class="timeline-list">
+        <li>
+          <time datetime="2026-11-08T12:00">今天 12:00</time>
+          <strong><span class="tag-inline">比分</span>中超第 30 轮下半场 3 场比分已录入</strong>
+          <p>上海申花 2-1 山东泰山、北京国安 0-0 浙江队、武汉三镇 1-3 天津津门虎。积分榜与射手榜一并刷新，卡扎伊什维利以 21 球暂列第一。</p>
+        </li>
+        <li>
+          <time datetime="2026-11-08T09:40">今天 09:40</time>
+          <strong><span class="tag-inline">赛程</span>今晚 24 场对阵表发布，含 4 场电竞 BO3</strong>
+          <p>足球 14 场、篮球 6 场、电竞 4 场。标红的 5 场为同项目强强对话，开球时间集中在 19:30 至 21:00。</p>
+        </li>
+        <li>
+          <time datetime="2026-11-07T22:15">昨天 22:15</time>
+          <strong><span class="tag-inline">战报</span>CBA 第 9 轮：浙江稠州 108-99 北京首钢</strong>
+          <p>程帅澎末节独得 14 分，北京外援杰曼 6 犯离场。赛后技术统计显示，浙江全场三分 34 投 15 中。</p>
+        </li>
+        <li>
+          <time datetime="2026-11-07T18:30">昨天 18:30</time>
+          <strong><span class="tag-inline">阵容</span>阿森纳公布客战维拉大名单，萨卡伤缺</strong>
+          <p>23:30 英超第 12 轮，萨卡因小腿伤势未入名单，特罗萨德顶到右路。维拉方面，沃特金斯首发待定。</p>
+        </li>
+        <li>
+          <time datetime="2026-11-06T20:05">本周 20:05</time>
+          <strong><span class="tag-inline">规则</span>LCK 冬季赛赛制调整：常规赛改为 BO3 单循环</strong>
+          <p>与 2025 赛季的 BO3 双循环相比，场次减少 18 场，季后赛名额由 6 席压缩到 5 席。官方公告发布于 11 月 6 日。</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 分类入口 -->
+    <section class="section" id="/category">
+      <div class="section-head">
+        <h2><span class="idx">04</span>分类入口</h2>
+        <span class="section-note">按项目与联赛细分</span>
+      </div>
+      <div class="cat-grid">
+        <a class="cat-item" href="#/latest"><b>中超赛程</b><span>第 30 轮 8 场</span><small>19:35 起</small></a>
+        <a class="cat-item" href="#/latest"><b>英超比分</b><span>第 12 轮 4 场</span><small>23:30 开球</small></a>
+        <a class="cat-item" href="#/latest"><b>CBA 直播表</b><span>第 10 轮 6 场</span><small>19:35 / 20:00</small></a>
+        <a class="cat-item" href="#/latest"><b>英雄联盟赛程</b><span>LPL 4 场 BO3</span><small>17:00 起</small></a>
+        <a class="cat-item" href="#/insight"><b>积分榜变动</b><span>中超前四争夺</span><small>11-08 更新</small></a>
+        <a class="cat-item" href="#/insight"><b>球员数据榜</b><span>射手榜 / 助攻榜</span><small>含 21 球领跑</small></a>
+        <a class="cat-item" href="#/guide"><b>开赛时间换算</b><span>北京时间口径</span><small>含海外联赛</small></a>
+        <a class="cat-item" href="#/faq"><b>伤停与停赛</b><span>赛前 1 小时确认</span><small>名单以官方为准</small></a>
+      </div>
+    </section>
+
+    <!-- 深度解析 -->
+    <section class="section" id="/insight">
+      <div class="section-head">
+        <h2><span class="idx">05</span>深度解析</h2>
+        <span class="section-note">全页唯一主体阅读区</span>
+      </div>
+      <div class="article-box">
+        <p>
+          赛程表的真正用途不在“看齐所有比赛”，而在帮忙决定哪几场值得守。今晚 24 场里，19:35 到 21:00 这 85 分钟一口气挤了 7 场，其中 3 场足球、2 场篮球、2 场电竞。把它当回事，就得先把时间冲突算清楚。
+        </p>
+
+        <h3>一、19:35 到 21:00 的时段挤压是结构性的</h3>
+        <p>
+          中超第 30 轮全部 8 场统一在 19:35 开球，这是联赛末轮的惯例：同时开赛，避免末轮默契球争议。CBA 第 10 轮有 4 场落在 19:35 与 20:00 两个节点，LPL 的 4 场 BO3 从 17:00 排到 21:00。三个项目各按各的节奏排期，谁也不等谁。
+        </p>
+        <p>
+          结果就是同一时段出现 7 个直播入口。<strong>能同时看完的只有 1 场，其余靠回看或比分推送。</strong>这不是内容匮乏问题，而是排期密度问题。以 11 月 8 日为例，若只守着英超 23:30 的阿森纳对维拉，前半夜 4 个小时里会错过 3 场中超末轮与 2 场 CBA。
+        </p>
+        <div class="callout">
+          <b>可核对的结构：</b>把当天赛程拆成「开赛时间—项目—是否需要盯盘」三列，20:00 之后每小时不超过 2 场重叠，才算时间分配合理。按 11-08 的排表，20:00—21:00 这一格有 CBA 2 场加电竞 1 场，超出了一倍。
+        </div>
+
+        <h3>二、末轮统一开赛对积分的实际影响，比“悬念”更具体</h3>
+        <p>
+          中超第 30 轮开打前，榜首上海海港 65 分、第二上海申花 62 分、第三成都蓉城 60 分。三队同轮开赛，积分变化只在 90 分钟结束后同时揭晓。以往末轮分开开赛时，先赛球队的比分会被后赛球队参考，2024 赛季第 30 轮就出现过领跑队下半场明显收着踢的情况。统一开赛切掉了这条信息通道。
+        </p>
+        <table class="compare-table">
+          <caption style="caption-side:top;text-align:left;font-size:var(--fs-xs);color:var(--c-ink-soft);padding-bottom:6px;">中超末轮开赛方式对比（2024 与 2026 赛季）</caption>
+          <thead>
+            <tr><th>项目</th><th>2024 赛季第 30 轮</th><th>2026 赛季第 30 轮</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>开赛方式</td><td>分两批，15:30 与 19:35</td><td>8 场统一 19:35</td></tr>
+            <tr><td>后赛队可获信息</td><td>可看到先赛比分</td><td>无法提前获知</td></tr>
+            <tr><td>转播场次密度</td><td>两波分散</td><td>单时段 8 场并行</td></tr>
+            <tr><td>观众取舍成本</td><td>较低</td><td>明显升高</td></tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>判断：</strong>统一开赛提升了公平性，代价是观众端的选择成本被放大了一倍。对只想看一场定胜负的球迷，这不是坏事；对习惯追两场、靠半场比分换台的观众，19:35 这个时间点基本等于强制二选一。
+        </p>
+
+        <h3>三、BLG 对 TES 的版本变量，能从公开记录里核出来</h3>
+        <p>
+          13.22 版本在 11 月 4 日上线，打野野区经验下调约 8%。BLG 在版本更新后的两场 BO3 里，一血率分别是 100%（对 WE）与 50%（对 JDG），并不支持“BLG 打野必然前期压制”的说法。TES 的问题在另一头：近三场 BO3 第二局胜率只有 33%，两场被让一追二。
+        </p>
+        <p>
+          转述解说席的说法是“BLG 运营更稳”，但可查的数据只支持一个更窄的结论：<strong>BLG 在 20 分钟经济领先时的胜率为 91%（11 场取 10 胜），TES 同样情形下为 78%（9 场取 7 胜）。</strong>差距在扩大优势的阶段，不在开局。把这两队的较量简单归因于“BLG 更强”会丢掉第二局的变量——而 BO3 的第二局恰是 TES 本赛季输得最多的一局。
+        </p>
+
+        <h3>四、赛前情报的可信度需要分层看</h3>
+        <p>
+          同一晚的信息来源至少三层。第一层是俱乐部官方公告，例如阿森纳 11 月 7 日 18:30 公布的客战名单，萨卡缺席可直接采信。第二层是赛前发布会与跟队记者，11 月 7 日下午有记者称沃特金斯“大概率首发”，这属于转述，尚未被官方名单确认。第三层是社区爆料，例如某论坛称广东宏远外援将轮休，没有任何俱乐部或联赛渠道背书，只能当推测。
+        </p>
+        <p>
+          把三层混在一起，就会得出“今晚多人缺阵、比赛质量下降”这类没法核对的判断。具体到 11 月 8 日：萨卡缺席是事实；沃特金斯首发是转述；广东外援轮休是推测。三者在赛前的权重完全不同。
+        </p>
+      </div>
+    </section>
+
+    <!-- 体验指南 -->
+    <section class="section" id="/guide">
+      <div class="section-head">
+        <h2><span class="idx">06</span>体验指南</h2>
+        <span class="section-note">从查赛程到看回看</span>
+      </div>
+      <ol class="steps">
+        <li><b>先定时间窗</b><span>打开今日赛程，按 18:00—21:00、21:00—24:00 两段划出可观看时间，再对号入座。11 月 8 日前半段有 7 场重叠，后半段只有英超与 1 场电竞。</span></li>
+        <li><b>按项目筛掉不看的</b><span>足球、篮球、电竞三类的节奏差异大，足球 90 分钟、篮球约 2 小时、电竞 BO3 约 2.5 小时。只追一项，冲突会少一半。</span></li>
+        <li><b>查赛前 1 小时的首发名单</b><span>CBA 首发通常在开赛前 40 分钟公布，中超在 60 分钟前，英雄联盟在 30 分钟前。名单确认后再决定守哪场，能避开外援轮休这类临时变化。</span></li>
+        <li><b>比分与战报分开读</b><span>比分只说明结果，战报里的控球率、三分命中数、经济差才解释过程。11 月 7 日浙江稠州 108-99 北京首钢，比分之外的关键是末节 14 比 4 的攻势。</span></li>
+        <li><b>回看补漏</b><span>错过的场次优先看集锦和关键回合，整场回放留给强强对话。24 场全看既不现实，也没有必要。</span></li>
+      </ol>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="/faq">
+      <div class="section-head">
+        <h2><span class="idx">07</span>常见问题</h2>
+        <span class="section-note">点开查看答案</span>
+      </div>
+      <div class="faq-list">
+        <details class="faq" open>
+          <summary>今天的比赛时间按哪个时区算？</summary>
+          <div class="faq-body">
+            <p>统一按北京时间（UTC+8）标注。英超、LCK 等海外联赛的原始开球时间会换算后列出，例如阿森纳对维拉原始为当地时间 15:30，换算后是 23:30。若赛程页与官方渠道出现 5 分钟以内差异，以联赛官方公告为准。</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>中超末轮为什么 8 场同时开球？</summary>
+          <div class="faq-body">
+            <p>联赛为压减末轮默契球空间，规定最后一轮所有场次同一时间开赛。2026 赛季第 30 轮执行的是 19:35 统一开球，与 2024 赛季分两批的排法不同。</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>CBA 首发名单什么时候能查到？</summary>
+          <div class="faq-body">
+            <p>大多数场次在开赛前 40 分钟左右由联赛官方渠道公布。外援是否轮休不一定写进首发公告，需要看赛前伤停名单。11 月 8 日辽宁对广东的首发，预计 19:20 前后可查。</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>英雄联盟 BO3 大概要打多久？</summary>
+          <div class="faq-body">
+            <p>单局含 BP 与暂停约 40 至 50 分钟，打满三局需要 2 至 2.5 小时。BLG 对 TES 若 21:00 开赛，最早 22:30 前后结束，打满三局要到 23:30。</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>积分榜和射手榜多久更新一次？</summary>
+          <div class="faq-body">
+            <p>比赛结束后 15 分钟内录入比分，积分榜随之更新；射手榜与助攻榜在同一批次刷新。11 月 8 日 12:00 的截面里，中超射手榜第一是 21 球的卡扎伊什维利。</p>
+          </div>
+        </details>
+        <details class="faq">
+          <summary>赛前爆料说某外援轮休，能信吗？</summary>
+          <div class="faq-body">
+            <p>要看来源层级。俱乐部官方公告可靠；跟队记者的说法属于转述，需要等名单确认；论坛与社交平台的匿名爆料只能当推测。没有官方或联赛渠道背书时，不要拿它当确定事实。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 用户评论 -->
+    <section class="section" id="/comments">
+      <div class="section-head">
+        <h2><span class="idx">08</span>用户评论</h2>
+        <span class="section-note">来自社区的真实反馈</span>
+      </div>
+      <div class="comment-list">
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#1f7a5c;">老</span>
+            <span class="cname">老看台阿齐</span>
+            <span class="ctime">今天 12:26</span>
+            <span class="cwhere">中超</span>
+          </div>
+          <p>海港 19:35 对成都那场，我盯的是中场三人组的拦截数据。上一轮海港被泰山打了 14 次反击，这场要是还这么放，收官战不好收。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#b8442f;">小</span>
+            <span class="cname">小林不吃亏</span>
+            <span class="ctime">今天 11:02</span>
+            <span class="cwhere">CBA</span>
+          </div>
+          <p>辽宁打广东排 20:00 太晚了，第二天上班根本熬不住。赛程密度这块确实该吐槽，19:35 一堆、20:00 又一堆，全挤一起。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#3d6f8e;">电</span>
+            <span class="cname">电竞散人</span>
+            <span class="ctime">今天 10:48</span>
+            <span class="cwhere">LPL</span>
+          </div>
+          <p>BLG 对 TES 那场，第二局才是重点。TES 本赛季第二局赢面小是明摆着的，解说老讲“运营稳”，不如直接摆 20 分钟经济差。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#8a5a10;">阿</span>
+            <span class="cname">阿尔特塔信徒</span>
+            <span class="ctime">昨天 23:10</span>
+            <span class="cwhere">英超</span>
+          </div>
+          <p>萨卡不在，特罗萨德打右路能不能拉开宽度是问号。维拉边后卫压得很高，这场可能变成对攻。23:30 太晚了，只能看回放。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#556;">中</span>
+            <span class="cname">中立观众甲</span>
+            <span class="ctime">昨天 20:35</span>
+            <span class="cwhere">体验</span>
+          </div>
+          <p>说实话，24 场全列出来有点多，真正值得看的也就 5 场。要是能先按“强强对话”标一下，省得自己一个个翻。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#1d4761;">数</span>
+            <span class="cname">数据党老周</span>
+            <span class="ctime">昨天 18:02</span>
+            <span class="cwhere">数据</span>
+          </div>
+          <p>浙江稠州 108-99 北京那场，三分 34 投 15 中，命中率 44.1%。北京输在末节 6 分钟只得了 5 分，杰曼 6 犯离场是转折，这才是关键。</p>
+        </div>
+        <div class="comment">
+          <div class="comment-head">
+            <span class="avatar" style="background:#0f2c3f;">新</span>
+            <span class="cname">新来的球迷</span>
+            <span class="ctime">本周 16:40</span>
+            <span class="cwhere">入门</span>
+          </div>
+          <p>想问一下，CBA 和 NBA 的赛程时间是不是都写北京时间？第一次看，分不清哪个是原始时间。指南那一步说得还行，就是例子只有一个。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 相关资讯 -->
+    <section class="section" id="/news">
+      <div class="section-head">
+        <h2><span class="idx">09</span>相关资讯</h2>
+        <span class="section-note">赛程与联赛动态</span>
+      </div>
+      <ul class="news-list">
+        <li>
+          <span class="news-date">11-08</span>
+          <div>
+            <a href="#/latest">中超第 30 轮 8 场统一 19:35 开球，争冠三队同时上阵</a>
+            <div class="nsum">海港 65 分、申花 62 分、蓉城 60 分，积分榜前三同轮开赛，末轮悬念保留到最后 90 分钟。</div>
+          </div>
+        </li>
+        <li>
+          <span class="news-date">11-07</span>
+          <div>
+            <a href="#/insight">13.22 版本打野经验下调，LPL 四场 BO3 节奏或变慢</a>
+            <div class="nsum">野区经验下调约 8%，前期入侵收益降低。BLG 与 TES 的 21:00 对局是观察样本。</div>
+          </div>
+        </li>
+        <li>
+          <span class="news-date">11-06</span>
+          <div>
+            <a href="#/latest">LCK 冬季赛改为 BO3 单循环，季后赛名额压缩到 5 席</a>
+            <div class="nsum">官方 11 月 6 日公告，常规赛场次比 2025 赛季少 18 场，赛程整体前移一周。</div>
+          </div>
+        </li>
+        <li>
+          <span class="news-date">11-05</span>
+          <div>
+            <a href="#/insight">CBA 第 9 轮三分命中率榜：浙江 44.1% 居首</a>
+            <div class="nsum">浙江稠州近三场三分出手占比 41%，比赛季均值高 6 个百分点，外线打法明显加码。</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 相关推荐标签 -->
+    <section class="section" id="/recommend">
+      <div class="section-head">
+        <h2><span class="idx">10</span>相关推荐</h2>
+        <span class="section-note">按关键词继续找</span>
+      </div>
+      <div class="tag-cloud">
+        <a href="#/latest">中超第 30 轮赛程</a>
+        <a href="#/latest">CBA 第 10 轮直播</a>
+        <a href="#/latest">LPL 今日 BO3 对阵</a>
+        <a href="#/insight">英超第 12 轮比分</a>
+        <a href="#/insight">中超积分榜变动</a>
+        <a href="#/insight">BLG 对 TES 版本分析</a>
+        <a href="#/guide">开赛时间换算方法</a>
+        <a href="#/faq">赛前首发名单查询</a>
+        <a href="#/insight">射手榜 21 球领跑</a>
+        <a href="#/comments">CBA 外援轮休讨论</a>
+      </div>
+    </section>
+
+    <!-- 补充板块：榜单 + 互动 -->
+    <section class="section" id="/board">
+      <div class="section-head">
+        <h2><span class="idx">11</span>今日关注榜与观看投票</h2>
+        <span class="section-note">按社区浏览热度排序</span>
+      </div>
+      <ol class="rank-list">
+        <li class="top">
+          <span class="rk-name">辽宁 vs 广东（CBA 第 10 轮）<small>20:00 · 内线对位与外援轮休</small></span>
+          <span class="rk-val"><b>186</b> 条讨论</span>
+        </li>
+        <li class="top">
+          <span class="rk-name">上海海港 vs 成都蓉城（中超第 30 轮）<small>19:35 · 争冠末轮</small></span>
+          <span class="rk-val"><b>162</b> 条讨论</span>
+        </li>
+        <li>
+          <span class="rk-name">BLG vs TES（LPL BO3）<small>21:00 · 版本适应</small></span>
+          <span class="rk-val"><b>141</b> 条讨论</span>
+        </li>
+        <li>
+          <span class="rk-name">阿森纳 vs 维拉（英超第 12 轮）<small>23:30 · 萨卡伤缺</small></span>
+          <span class="rk-val"><b>98</b> 条讨论</span>
+        </li>
+        <li>
+          <span class="rk-name">上海申花 vs 山东泰山（中超第 30 轮）<small>19:35 · 卡扎伊什维利冲射手王</small></span>
+          <span class="rk-val"><b>73</b> 条讨论</span>
+        </li>
+      </ol>
+      <div class="vote-box" style="margin-top:var(--space-4);">
+        <p class="vote-q">今晚 19:35 到 21:00 撞车，你打算先看哪一场？</p>
+        <div class="vote-opts" id="voteOpts">
+          <button class="vote-opt" type="button" data-pct="34">海港 vs 成都（中超末轮）<span class="vo-pct">34%</span></button>
+          <button class="vote-opt" type="button" data-pct="29">辽宁 vs 广东（CBA）<span class="vo-pct">29%</span></button>
+          <button class="vote-opt" type="button" data-pct="23">BLG vs TES（LPL）<span class="vo-pct">23%</span></button>
+          <button class="vote-opt" type="button" data-pct="14">都不看，等 23:30 英超<span class="vo-pct">14%</span></button>
+        </div>
+        <p class="vote-hint" id="voteHint">点选后查看社区当前分布，仅作观看偏好参考。</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 侧栏 -->
+  <aside class="sidebar" aria-label="侧栏">
+    <div class="side-card">
+      <h2>赛程导航</h2>
+      <ul class="side-nav" id="sideNav">
+        <li><a href="#/overview">赛事概览</a></li>
+        <li><a href="#/featured">精选内容推荐</a></li>
+        <li><a href="#/latest">最新更新</a></li>
+        <li><a href="#/category">分类入口</a></li>
+        <li><a href="#/insight">深度解析</a></li>
+        <li><a href="#/guide">体验指南</a></li>
+        <li><a href="#/faq">常见问题</a></li>
+        <li><a href="#/board">今日关注榜</a></li>
+      </ul>
+    </div>
+    <div class="side-card">
+      <h2>马上开赛</h2>
+      <ul class="side-mini">
+        <li><a href="#/latest">18:00 武汉三镇 vs 天津津门虎</a><span>中超第 30 轮 · 已完赛</span></li>
+        <li><a href="#/latest">19:35 上海海港 vs 成都蓉城</a><span>中超第 30 轮 · 待开赛</span></li>
+        <li><a href="#/latest">20:00 辽宁 vs 广东</a><span>CBA 第 10 轮 · 待开赛</span></li>
+        <li><a href="#/latest">21:00 BLG vs TES</a><span>LPL · BO3</span></li>
+      </ul>
+    </div>
+    <div class="side-card">
+      <h2>今日看点数字</h2>
+      <ul class="side-facts">
+        <li>待开赛 <b>13</b> 场，已完赛 <b>11</b> 场</li>
+        <li>19:35 同时开球 <b>4</b> 场</li>
+        <li>最晚开赛 <b>23:30</b>（英超）</li>
+        <li>今日新增讨论 <b>368</b> 条</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<!-- 页脚 -->
+<footer class="site-footer" id="/footer">
+  <div class="wrap">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <span class="brand-name">91每天比赛</span>
+        <p>把当天的对阵、开赛时间与比分结果按项目归拢，帮你在密集赛程里挑出真正值得守的几场。</p>
+      </div>
+      <div class="footer-col">
+        <h3>赛事栏目</h3>
+        <ul>
+          <li><a href="#/overview">赛事概览</a></li>
+          <li><a href="#/latest">最新更新</a></li>
+          <li><a href="#/category">分类入口</a></li>
+          <li><a href="#/board">今日关注榜</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>阅读栏目</h3>
+        <ul>
+          <li><a href="#/featured">精选内容推荐</a></li>
+          <li><a href="#/insight">深度解析</a></li>
+          <li><a href="#/guide">体验指南</a></li>
+          <li><a href="#/recommend">相关推荐</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>互动与帮助</h3>
+        <ul>
+          <li><a href="#/faq">常见问题</a></li>
+          <li><a href="#/comments">用户评论</a></li>
+          <li><a href="#/news">相关资讯</a></li>
+          <li><a href="#/board">观看投票</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-note">
+      <p>数据说明：页面内赛程、比分、积分与讨论数为演示用示例数据，按 2026-11-08 截面生成；球队、球员与联赛信息以官方公告为准，不构成任何投注依据。</p>
+      <p>更新时间：2026-11-08 12:00，对应「最新更新」中 3 场中超比分录入与积分榜刷新。</p>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 91每天比赛 · 每日赛程整理</span>
+      <span>内容仅供球迷观赛参考</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="回到页面顶部">↑</button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* 移动端菜单 */
+  var header = document.getElementById('siteHeader');
+  var menuToggle = document.getElementById('menuToggle');
+  if(menuToggle && header){
+    menuToggle.addEventListener('click', function(){
+      var open = header.classList.toggle('nav-open');
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    // 点击导航链接后收起
+    header.addEventListener('click', function(e){
+      var target = e.target;
+      if(target && target.tagName === 'A' && header.classList.contains('nav-open')){
+        header.classList.remove('nav-open');
+        menuToggle.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+
+  /* 本地搜索 */
+  var input = document.getElementById('searchInput');
+  var feedback = document.getElementById('searchFeedback');
+  var corpus = [
+    {t:'中超第 30 轮 上海海港 成都蓉城 19:35', href:'#/latest'},
+    {t:'中超第 30 轮 上海申花 山东泰山 19:35', href:'#/latest'},
+    {t:'CBA 第 10 轮 辽宁本钢 广东宏远 20:00', href:'#/latest'},
+    {t:'LPL BLG TES 21:00 BO3', href:'#/insight'},
+    {t:'英超第 12 轮 阿森纳 维拉 23:30', href:'#/latest'},
+    {t:'浙江稠州 108-99 北京首钢 CBA 第 9 轮', href:'#/news'},
+    {t:'中超积分榜 射手榜 卡扎伊什维利 21 球', href:'#/insight'},
+    {t:'开赛时间换算 北京时间', href:'#/guide'},
+    {t:'首发名单 伤停 赛前查询', href:'#/faq'},
+    {t:'LCK 冬季赛 BO3 单循环', href:'#/news'}
+  ];
+
+  function doSearch(){
+    if(!input || !feedback) return;
+    var q = input.value.trim().toLowerCase();
+    if(!q){
+      feedback.style.display = 'none';
+      feedback.textContent = '';
+      return;
+    }
+    var hits = corpus.filter(function(item){ return item.t.toLowerCase().indexOf(q) !== -1; });
+    if(hits.length === 0){
+      feedback.style.display = 'block';
+      feedback.textContent = '没有找到与“' + input.value.trim() + '”相关的赛程，换个球队名或项目试试。';
+      return;
+    }
+    feedback.style.display = 'block';
+    feedback.innerHTML = '';
+    var tip = document.createElement('div');
+    tip.style.cssText = 'font-size:12px;color:#93a2b1;margin-bottom:4px;';
+    tip.textContent = '匹配到 ' + hits.length + ' 条：';
+    feedback.appendChild(tip);
+    hits.slice(0,5).forEach(function(item){
+      var a = document.createElement('a');
+      a.href = item.href;
+      a.textContent = item.t;
+      a.style.cssText = 'display:block;padding:4px 0;font-size:13px;';
+      a.addEventListener('click', function(){ feedback.style.display = 'none'; });
+      feedback.appendChild(a);
+    });
+  }
+  if(input){
+    input.addEventListener('input', doSearch);
+    input.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); doSearch(); }
+    });
+    document.addEventListener('click', function(e){
+      if(feedback && !feedback.contains(e.target) && e.target !== input){
+        feedback.style.display = 'none';
+      }
+    });
+  }
+
+  /* 侧栏滚动高亮 */
+  var sideLinks = Array.prototype.slice.call(document.querySelectorAll('#sideNav a'));
+  var sections = sideLinks.map(function(a){
+    var id = a.getAttribute('href').slice(1);
+    return document.getElementById(id);
+  });
+  function highlight(){
+    var pos = window.scrollY + 140;
+    var current = -1;
+    for(var i = 0; i < sections.length; i++){
+      if(sections[i] && sections[i].offsetTop <= pos) current = i;
+    }
+    sideLinks.forEach(function(a, i){
+      a.classList.toggle('active', i === current);
+    });
+  }
+  window.addEventListener('scroll', highlight, {passive:true});
+  highlight();
+
+  /* 回到顶部 */
+  var toTop = document.getElementById('toTop');
+  function toggleTop(){
+    if(!toTop) return;
+    if(window.scrollY > 480){ toTop.classList.add('show'); }
+    else { toTop.classList.remove('show'); }
+  }
+  window.addEventListener('scroll', toggleTop, {passive:true});
+  toggleTop();
+  if(toTop){
+    toTop.addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  /* 投票交互 */
+  var voteOpts = document.getElementById('voteOpts');
+  var voteHint = document.getElementById('voteHint');
+  if(voteOpts && voteHint){
+    voteOpts.addEventListener('click', function(e){
+      var btn = e.target.closest('.vote-opt');
+      if(!btn) return;
+      Array.prototype.forEach.call(voteOpts.querySelectorAll('.vote-opt'), function(b){
+        b.classList.remove('selected');
+        b.setAttribute('aria-pressed','false');
+      });
+      btn.classList.add('selected');
+      btn.setAttribute('aria-pressed','true');
+      voteHint.textContent = '已记录你的选择：' + btn.textContent.replace(/\d+%/,'').trim() + '，社区当前占比 ' + btn.getAttribute('data-pct') + '%。';
+    });
+  }
+
+  /* 平滑滚动偏移已由 CSS scroll-margin-top 处理，这里补足不支持时的兜底 */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#/"]');
+    if(!a) return;
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    var offset = 96;
+    var top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top: top, behavior:'smooth'});
+    if(header && header.classList.contains('nav-open')){
+      header.classList.remove('nav-open');
+      if(menuToggle) menuToggle.setAttribute('aria-expanded','false');
+    }
+    history.replaceState(null, '', a.getAttribute('href'));
+  });
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "91每天比赛",
+  "description": "每日足球、篮球、电竞赛事赛程与比分整理，含赛前前瞻、积分榜与观赛指南。",
+  "inLanguage": "zh-CN"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "今天的比赛时间按哪个时区算？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "统一按北京时间（UTC+8）标注。英超、LCK 等海外联赛的原始开球时间会换算后列出，例如阿森纳对维拉原始为当地时间 15:30，换算后是 23:30。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "中超末轮为什么 8 场同时开球？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "联赛为压减末轮默契球空间，规定最后一轮所有场次同一时间开赛。2026 赛季第 30 轮执行的是 19:35 统一开球。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "CBA 首发名单什么时候能查到？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "大多数场次在开赛前 40 分钟左右由联赛官方渠道公布。外援是否轮休不一定写进首发公告，需要看赛前伤停名单。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "英雄联盟 BO3 大概要打多久？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "单局含 BP 与暂停约 40 至 50 分钟，打满三局需要 2 至 2.5 小时。21:00 开赛的 BO3 最早 22:30 前后结束。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "积分榜和射手榜多久更新一次？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "比赛结束后 15 分钟内录入比分，积分榜随之更新；射手榜与助攻榜在同一批次刷新。"
+      }
+    }
+  ]
+}
+</script>
+</body>
+            </html>
